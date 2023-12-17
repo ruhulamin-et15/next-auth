@@ -1,76 +1,78 @@
 "use client";
-import React from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as yup from "yup";
-import toast from "react-hot-toast";
+import Loading from "@/components/Loading";
 import axios from "axios";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import * as yup from "yup";
 
-const UpdatePass = () => {
-  const validationSchema = yup.object({
-    password: yup
-      .string()
-      .min(6, "New Password must be grater than 6 characters")
-      .required("New Password is required"),
-    cpassword: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "New Password Should Match")
-      .required("Confirm New Password is required"),
-  });
-  const initialValue = {
-    password: "",
-  };
+const UpdateUser = ({ params }) => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    fetch(`/api/auth/users/${params.id}`)
+      .then((res) => res.json())
+      .then((data) => setUser(data.user));
+  }, []);
 
   const router = useRouter();
+  const validationSchema = yup.object({
+    name: yup.string().required("Name is required"),
+    email: yup.string().email("Email must valid").required("Email is required"),
+  });
 
   const handleSubmit = async (e) => {
     try {
-      const response = await axios.put("/api/updatepassword", e);
-      const data = await response.data;
+      const res = await axios.put(`/api/auth/users/${params.id}`, e);
+      const data = await res.data;
       toast.success(data.msg);
-      router.push("/profile");
+      router.push(`/auth/users/${params.id}`);
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
   };
+
+  if (!user) {
+    return <Loading />;
+  }
   return (
     <>
       <div className="min-h-[82vh] w-full flex items-center justify-center">
         <Formik
           validationSchema={validationSchema}
-          initialValues={initialValue}
+          initialValues={user}
           onSubmit={handleSubmit}
         >
           <Form className=" w-3/6 mx-auto">
             <h2 className="mb-8 text-center text-2xl font-semibold underline">
-              Update Password
+              Update User
             </h2>
             <div className="mb-3">
-              <label htmlFor="name">New Password:</label>
+              <label htmlFor="name">Name:</label>
               <Field
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter Your New Password"
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Enter your Name"
               />
               <ErrorMessage
-                name="password"
+                name="name"
                 component={"p"}
                 className="text-red-500"
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="cpassword">Confirm New Password:</label>
+              <label htmlFor="email">Email:</label>
               <Field
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                type="password"
-                name="cpassword"
-                id="cpassword"
-                placeholder="Confirm Your New Password"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your Email"
               />
               <ErrorMessage
-                name="cpassword"
+                name="email"
                 component={"p"}
                 className="text-red-500"
               />
@@ -81,7 +83,7 @@ const UpdatePass = () => {
                 type="submit"
                 className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
               >
-                Update Password
+                Update
               </button>
             </div>
           </Form>
@@ -91,4 +93,4 @@ const UpdatePass = () => {
   );
 };
 
-export default UpdatePass;
+export default UpdateUser;

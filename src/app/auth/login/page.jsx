@@ -26,7 +26,7 @@ const Login = () => {
   const handleSubmit = async (e, { resetForm }) => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/login", e);
+      const response = await axios.post("/api/auth/login", e);
       const data = await response.data;
       toast.success(data.msg);
       resetForm();
@@ -90,7 +90,10 @@ const Login = () => {
             <div className="text-center  mb-2">
               <p>
                 Don{"'"}t have an account?{" "}
-                <Link className="underline text-blue-500" href={"/register"}>
+                <Link
+                  className="underline text-blue-500"
+                  href={"/auth/register"}
+                >
                   Register Here
                 </Link>
               </p>
@@ -100,7 +103,7 @@ const Login = () => {
                 Forgot password?{" "}
                 <Link
                   className="underline text-blue-500"
-                  href={"/forget-password"}
+                  href={"/auth/forget-password"}
                 >
                   Reset Password
                 </Link>

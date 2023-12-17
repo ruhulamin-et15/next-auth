@@ -12,11 +12,11 @@ const Navbar = () => {
   const router = useRouter();
   const logoutHandler = async () => {
     try {
-      const res = await axios.post("/api/logout");
+      const res = await axios.post("/api/auth/logout");
       const data = await res.data;
       toast.success(data.msg);
       window.location.reload();
-      router.push("/login");
+      router.push("/auth/login");
     } catch (error) {
       toast.error(error.res?.data?.error);
     }
@@ -37,11 +37,11 @@ const Navbar = () => {
           <nav className="md:ml-auto flex items-center text-base justify-center">
             {user ? (
               <>
-                <Link href={"/users"} className="mr-5 hover:text-gray-900">
+                <Link href={"/auth/users"} className="mr-5 hover:text-gray-900">
                   Users Update
                 </Link>
                 <Link
-                  href={"/profile"}
+                  href={"/auth/profile"}
                   className="mr-5 hover:bg-gray-500 hover:text-white"
                 >
                   Hi, {user.name}
@@ -66,10 +66,13 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link href={"/login"} className="mr-5 hover:text-gray-900">
+                <Link href={"/auth/login"} className="mr-5 hover:text-gray-900">
                   Login
                 </Link>
-                <Link href={"/register"} className="mr-5 hover:text-gray-900">
+                <Link
+                  href={"/auth/register"}
+                  className="mr-5 hover:text-gray-900"
+                >
                   Register
                 </Link>
               </>

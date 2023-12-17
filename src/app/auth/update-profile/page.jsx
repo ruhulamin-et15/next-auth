@@ -1,39 +1,14 @@
-// "use client";
-// import React, { useEffect, useState } from "react";
-
-// const UpdateUser = ({ params }) => {
-//   const [user, setUser] = useState(null);
-//   useEffect(() => {
-//     fetch(`/api/users/${params.id}`)
-//       .then((res) => res.json())
-//       .then((data) => setUser(data.user));
-//   }, []);
-//   return (
-//     <>
-//       <p>{user.name}</p>
-//     </>
-//   );
-// };
-
-// export default UpdateUser;
-
 "use client";
 import Loading from "@/components/Loading";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import * as yup from "yup";
 
-const UpdateUser = ({ params }) => {
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    fetch(`/api/users/${params.id}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data.user));
-  }, []);
-
+const UpdateProfile = () => {
+  const { user } = useAuth();
   const router = useRouter();
   const validationSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -42,10 +17,10 @@ const UpdateUser = ({ params }) => {
 
   const handleSubmit = async (e) => {
     try {
-      const res = await axios.put(`/api/users/${params.id}`, e);
+      const res = await axios.put("/api/auth/update-profile", e);
       const data = await res.data;
       toast.success(data.msg);
-      router.push(`/users/${params.id}`);
+      router.push("/");
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
@@ -64,7 +39,7 @@ const UpdateUser = ({ params }) => {
         >
           <Form className=" w-3/6 mx-auto">
             <h2 className="mb-8 text-center text-2xl font-semibold underline">
-              Update User
+              Update Profile
             </h2>
             <div className="mb-3">
               <label htmlFor="name">Name:</label>
@@ -112,4 +87,4 @@ const UpdateUser = ({ params }) => {
   );
 };
 
-export default UpdateUser;
+export default UpdateProfile;

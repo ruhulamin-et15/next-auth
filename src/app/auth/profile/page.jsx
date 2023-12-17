@@ -20,10 +20,10 @@ const Profile = () => {
           <p className="text-xl mb-2 text-white">Email: {user.email}</p>
           <div className="flex gap-3">
             <p className="bg-orange-400 w-2/6 px-1 text-center py-1 rounded-md hover:bg-green-400">
-              <Link href={"/update-profile"}>Update Info</Link>
+              <Link href={"/auth/update-profile"}>Update Info</Link>
             </p>
             <p className="bg-orange-400 w-2/6 px-1 text-center py-1 rounded-md hover:bg-green-400">
-              <Link href={"/updatepassword"}>Update Password</Link>
+              <Link href={"/auth/updatepassword"}>Update Password</Link>
             </p>
           </div>
         </div>

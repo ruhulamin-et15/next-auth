@@ -28,11 +28,11 @@ const Register = () => {
   const handleSubmit = async (e, { resetForm }) => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/register", e);
+      const response = await axios.post("/api/auth/register", e);
       const data = await response.data;
       toast.success(data.msg);
       resetForm();
-      router.push("/login");
+      router.push("/auth/login");
       setLoading(false);
     } catch (error) {
       toast.error(error?.response?.data?.error);
@@ -108,7 +108,7 @@ const Register = () => {
             <div className="text-center  mb-2">
               <p>
                 Already have an account?{" "}
-                <Link className="underline text-blue-500" href={"/login"}>
+                <Link className="underline text-blue-500" href={"/auth/login"}>
                   Login Here
                 </Link>
               </p>

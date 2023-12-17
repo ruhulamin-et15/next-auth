@@ -1,72 +1,76 @@
 "use client";
-import Loading from "@/components/Loading";
-import { useAuth } from "@/context/AuthContext";
-import axios from "axios";
+import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
 import * as yup from "yup";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-const UpdateProfile = () => {
-  const { user } = useAuth();
-  const router = useRouter();
+const UpdatePass = () => {
   const validationSchema = yup.object({
-    name: yup.string().required("Name is required"),
-    email: yup.string().email("Email must valid").required("Email is required"),
+    password: yup
+      .string()
+      .min(6, "New Password must be grater than 6 characters")
+      .required("New Password is required"),
+    cpassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "New Password Should Match")
+      .required("Confirm New Password is required"),
   });
+  const initialValue = {
+    password: "",
+  };
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     try {
-      const res = await axios.put("/api/update-profile", e);
-      const data = await res.data;
+      const response = await axios.put("/api/auth/updatepassword", e);
+      const data = await response.data;
       toast.success(data.msg);
-      router.push("/");
+      router.push("/auth/profile");
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
   };
-
-  if (!user) {
-    return <Loading />;
-  }
   return (
     <>
       <div className="min-h-[82vh] w-full flex items-center justify-center">
         <Formik
           validationSchema={validationSchema}
-          initialValues={user}
+          initialValues={initialValue}
           onSubmit={handleSubmit}
         >
           <Form className=" w-3/6 mx-auto">
             <h2 className="mb-8 text-center text-2xl font-semibold underline">
-              Update Profile
+              Update Password
             </h2>
             <div className="mb-3">
-              <label htmlFor="name">Name:</label>
+              <label htmlFor="name">New Password:</label>
               <Field
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Enter your Name"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter Your New Password"
               />
               <ErrorMessage
-                name="name"
+                name="password"
                 component={"p"}
                 className="text-red-500"
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="cpassword">Confirm New Password:</label>
               <Field
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your Email"
+                type="password"
+                name="cpassword"
+                id="cpassword"
+                placeholder="Confirm Your New Password"
               />
               <ErrorMessage
-                name="email"
+                name="cpassword"
                 component={"p"}
                 className="text-red-500"
               />
@@ -77,7 +81,7 @@ const UpdateProfile = () => {
                 type="submit"
                 className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
               >
-                Update
+                Update Password
               </button>
             </div>
           </Form>
@@ -87,4 +91,4 @@ const UpdateProfile = () => {
   );
 };
 
-export default UpdateProfile;
+export default UpdatePass;

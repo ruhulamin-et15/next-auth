@@ -1,5 +1,4 @@
 "use client";
-import Loading from "@/components/Loading";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,7 +8,7 @@ import toast from "react-hot-toast";
 const SinglePage = ({ params }) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
-    fetch(`/api/users/${params.id}`)
+    fetch(`/api/auth/users/${params.id}`)
       .then((res) => res.json())
       .then((data) => setUser(data.user));
   }, []);
@@ -18,10 +17,10 @@ const SinglePage = ({ params }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`/api/users/${params.id}`);
+      const response = await axios.delete(`/api/auth/users/${params.id}`);
       const data = await response.data;
       toast.success(data.msg);
-      router.push("/users");
+      router.push("/auth/users");
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
@@ -43,7 +42,7 @@ const SinglePage = ({ params }) => {
           <p>Phone:</p>
           <div className="flex gap-4">
             <p className="bg-blue-400 p-2 rounded-md">
-              <Link href={`/users/update/${params.id}`}>Update</Link>
+              <Link href={`/auth/users/update/${params.id}`}>Update</Link>
             </p>
             <p className="bg-red-400 p-2 rounded-md">
               <button onClick={handleDelete}>Delete</button>

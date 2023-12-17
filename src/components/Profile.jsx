@@ -20,7 +20,7 @@ const Profile = () => {
           <div className="mb-2">
             <Link
               className="border border-green-400 px-4 py-1 rounded-lg bg-blue-500"
-              href={"/update-profile"}
+              href={"/auth/update-profile"}
             >
               Update Profile
             </Link>

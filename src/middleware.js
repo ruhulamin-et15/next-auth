@@ -6,21 +6,26 @@ export const middleware = (request) => {
   //all user acces this route
   const publicRoute = [
     "/",
-    "/forget-password",
-    "/update-password",
-    "/register",
-    "/login",
+    "/auth/forget-password",
+    "/auth/update-password",
+    "/auth/register",
+    "/auth/login",
   ];
   const isLoggedIn = request.cookies.get("token");
   if (publicRoute.includes(pathVariable) && isLoggedIn) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   if (!publicRoute.includes(pathVariable) && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 };
 
 export const config = {
   //protected route
-  matcher: ["/profile", "/update-profile", "/updatepassword", "/users/:path*"],
+  matcher: [
+    "/auth/profile",
+    "/auth/update-profile",
+    "/auth/updatepassword",
+    "/auth/users/:path*",
+  ],
 };

@@ -18,7 +18,7 @@ export const SendEmail = async (name, token, email) => {
 
     html: `Hey, ${name}
     your forget password link is below click the link <br/> 
-    <a href="http://localhost:3000/update-password?token=${token}">Click</a>
+    <a href="http://localhost:3000/auth/update-password?token=${token}">Click</a>
     `,
   });
   return info;

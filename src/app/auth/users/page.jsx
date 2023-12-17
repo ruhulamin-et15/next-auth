@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 const Users = () => {
   const [users, setUsers] = useState(null);
   useEffect(() => {
-    fetch("/api/users")
+    fetch("/api/auth/users")
       .then((res) => res.json())
       .then((data) => setUsers(data.users));
   }, []);
@@ -31,14 +31,14 @@ const Users = () => {
 
               <div className="flex gap-3">
                 <p className="bg-gray-500 w-1/4 px-3 py-2 rounded-md mt-5 text-center">
-                  <Link href={`/users/${item._id}`}>See Details</Link>
+                  <Link href={`/auth/users/${item._id}`}>See Details</Link>
                 </p>
                 <p className="bg-red-500 w-1/4 px-3 py-2 rounded-md mt-5 text-center">
                   <button
                     onClick={async () => {
                       try {
                         const response = await axios.delete(
-                          `/api/users/${item._id}`
+                          `/api/auth/users/${item._id}`
                         );
                         const data = await response.data;
                         toast.success(data.msg);

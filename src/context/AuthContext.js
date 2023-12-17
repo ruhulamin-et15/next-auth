@@ -11,7 +11,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const fetchData = async () => {
     try {
-      const res = await axios.get("/api/profile");
+      const res = await axios.get("/api/auth/profile");
       const data = await res.data;
       setUser(data?.user);
     } catch (error) {
@@ -27,14 +27,14 @@ export const AuthProvider = ({ children }) => {
     //only auth data access this route
     const fetchRoute = [
       "/",
-      "/update-profile", //using token
-      "/updatepassword", //using token
-      "/profile",
-      "/login",
-      "/register",
-      "/users",
-      `/users/${params.id}`, //using by id
-      `/users/update/${params.id}`, //using by id
+      "/auth/update-profile", //using token
+      "/auth/updatepassword", //using token
+      "/auth/profile",
+      "/auth/login",
+      "/auth/register",
+      "/auth/users",
+      `/auth/users/${params.id}`, //using by id
+      `/auth/users/update/${params.id}`, //using by id
     ];
     if (fetchRoute.includes(pathName)) {
       fetchData();
