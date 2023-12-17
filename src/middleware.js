@@ -12,6 +12,7 @@ export const middleware = (request) => {
     "/auth/login",
   ];
   const isLoggedIn = request.cookies.get("token");
+
   if (publicRoute.includes(pathVariable) && isLoggedIn) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -23,8 +24,11 @@ export const middleware = (request) => {
 export const config = {
   //protected route
   matcher: [
+    //users route
     "/auth/profile",
     "/auth/update-profile",
+
+    //admin route
     "/auth/updatepassword",
     "/auth/users/:path*",
   ],

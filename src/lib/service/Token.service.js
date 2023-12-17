@@ -5,9 +5,13 @@ const FORGET = process.env.FORGET_JWT || "ssssaa";
 
 //user token generate
 export const GenerateToken = async (user) => {
-  const token = await jwt.sign({ userId: user._id }, AUTH, {
-    expiresIn: "2d",
-  });
+  const token = await jwt.sign(
+    { userId: user._id, admin: user.isAdmin, banned: user.isBanned },
+    AUTH,
+    {
+      expiresIn: "1d",
+    }
+  );
   return token;
 };
 

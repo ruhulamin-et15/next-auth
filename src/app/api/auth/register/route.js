@@ -20,13 +20,13 @@ export const POST = async (req) => {
   if (existUser) {
     return NextResponse.json({ error: "User already exist!" }, { status: 400 });
   }
-  await UserModel.create({
+  const newUser = await UserModel.create({
     name,
     email,
     password,
   });
   return NextResponse.json(
-    { msg: "User Registration Successfully" },
+    { msg: "User Registration Successfully", newUser },
     { status: 201 }
   );
 };

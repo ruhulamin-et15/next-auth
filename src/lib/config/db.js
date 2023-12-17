@@ -9,3 +9,11 @@ export const connectDB = async () => {
     process.exit();
   }
 };
+
+export const isLoggedIn = async (request) => {
+  try {
+    request.cookies.get("token") || "";
+  } catch (error) {
+    console.log(error);
+  }
+};

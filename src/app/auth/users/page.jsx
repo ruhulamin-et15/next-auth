@@ -13,9 +13,6 @@ const Users = () => {
       .then((data) => setUsers(data.users));
   }, []);
 
-  // if (!users) {
-  //   return <Loading />;
-  // }
   return (
     <div className="min-h-[90vh] w-full bg-gray-400">
       <h4 className="text-center p-3 text-2xl text-white-400 underline italic">

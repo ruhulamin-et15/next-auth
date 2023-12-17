@@ -1,20 +1,33 @@
 import { connectDB } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-//get single user
+//get single user by id
 export const GET = async (req) => {
-  await connectDB();
   try {
-    //logged in check
-    const isLoggedIn = req.cookies.get("token") || "";
-    if (!isLoggedIn) {
+    //logged in check by token
+    const token = req.cookies.get("token") || "";
+    if (!token) {
       return NextResponse.json(
         { error: "Please login first" },
         { status: 401 }
       );
     }
 
+    const tokenValue = token.value || "";
+    const decodedToken = jwt.decode(tokenValue);
+    const isAdmin = decodedToken?.admin;
+
+    //admin check by token
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: "Only admin see details user" },
+        { status: 402 }
+      );
+    }
+
+    await connectDB();
     const id = req.url.split("users/")[1];
     const user = await UserModel.findById(id).select("-password");
     if (!user) {
@@ -34,19 +47,30 @@ export const GET = async (req) => {
 
 //delete user by id
 export const DELETE = async (req) => {
-  await connectDB();
   try {
-    //logged in check
-    const isLoggedIn = req.cookies.get("token") || "";
-    if (!isLoggedIn) {
+    //logged in check by token
+    const token = req.cookies.get("token") || "";
+    if (!token) {
       return NextResponse.json(
         { error: "Please login first" },
         { status: 401 }
       );
     }
 
-    const id = await req.url.split("users/")[1];
+    const tokenValue = token.value || "";
+    const decodedToken = jwt.decode(tokenValue);
+    const isAdmin = decodedToken?.admin;
 
+    //admin check by token
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: "Only admin delete this user" },
+        { status: 402 }
+      );
+    }
+
+    await connectDB();
+    const id = await req.url.split("users/")[1];
     const user = await UserModel.findByIdAndDelete(id);
     if (!user) {
       return NextResponse.json({ error: "user not found" }, { status: 404 });
@@ -67,25 +91,30 @@ export const DELETE = async (req) => {
 //update user by id
 export const PUT = async (req) => {
   try {
-    //logged in check
-    const isLoggedIn = (await req.cookies.get("token")) || "";
-    if (!isLoggedIn) {
+    //logged in check by token
+    const token = req.cookies.get("token") || "";
+    if (!token) {
       return NextResponse.json(
         { error: "Please login first" },
         { status: 401 }
+      );
+    }
+
+    const tokenValue = token.value || "";
+    const decodedToken = jwt.decode(tokenValue);
+    const isAdmin = decodedToken?.admin;
+
+    //admin check
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: "Only admin update this user" },
+        { status: 402 }
       );
     }
     await connectDB();
     const id = req.url.split("users/")[1];
     const { name, email } = await req.json();
 
-    // const existUser = await UserModel.find({ email });
-    // if (existUser) {
-    //   return NextResponse.json(
-    //     { error: "this email is already used by another one" },
-    //     { status: 401 }
-    //   );
-    // }
     const updatedUser = await UserModel.findByIdAndUpdate(
       id,
       { $set: { name, email } },
