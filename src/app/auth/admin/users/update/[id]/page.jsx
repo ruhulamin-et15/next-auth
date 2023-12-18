@@ -26,7 +26,7 @@ const UpdateUser = ({ params }) => {
       const res = await axios.put(`/api/auth/users/${params.id}`, e);
       const data = await res.data;
       toast.success(data.msg);
-      router.push(`/auth/users/${params.id}`);
+      router.push(`/auth/admin/users/${params.id}`);
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
@@ -73,6 +73,70 @@ const UpdateUser = ({ params }) => {
               />
               <ErrorMessage
                 name="email"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone">Phone:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="Enter your Phone"
+              />
+              <ErrorMessage
+                name="phone"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country">Country:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="text"
+                name="country"
+                id="country"
+                placeholder="Enter your Country"
+              />
+              <ErrorMessage
+                name="country"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="isAdmin">Admin:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                name="isAdmin"
+                as="select"
+              >
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </Field>
+              <ErrorMessage
+                name="isAdmin"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="isBanned">Banned:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                name="isBanned"
+                as="select"
+              >
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </Field>
+              <ErrorMessage
+                name="isAdmin"
                 component={"p"}
                 className="text-red-500"
               />

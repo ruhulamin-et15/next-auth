@@ -1,10 +1,7 @@
 import { connectDB } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-
-//admin create/get/update/delete all users,
-//create user
+import { VerifyToken } from "@/lib/service/Token.service";
 
 //get all users
 export const GET = async (req) => {
@@ -18,15 +15,13 @@ export const GET = async (req) => {
       );
     }
 
-    const tokenValue = token.value || "";
-    const decodedToken = jwt.decode(tokenValue);
-    const isAdmin = decodedToken?.admin;
+    const { admin } = await VerifyToken(token.value);
 
     //admin check by token
-    if (!isAdmin) {
+    if (!admin) {
       return NextResponse.json(
         { error: "Only admin see users list" },
-        { status: 402 }
+        { status: 401 }
       );
     }
     await connectDB();

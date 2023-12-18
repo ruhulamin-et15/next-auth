@@ -1,4 +1,5 @@
 "use client";
+
 import axios from "axios";
 import { useParams, usePathname } from "next/navigation";
 const { createContext, useState, useContext, useEffect } = require("react");
@@ -21,26 +22,28 @@ export const AuthProvider = ({ children }) => {
 
   const pathName = usePathname();
   const [user, setUser] = useState(null);
-  const params = useParams();
+  // const params = useParams();
 
   useEffect(() => {
-    //only auth data access this route
-    const fetchRoute = [
-      "/",
-      "/auth/update-profile", //using token
-      "/auth/updatepassword", //using token
-      "/auth/profile",
-      "/auth/login",
-      "/auth/register",
-      "/auth/users",
-      `/auth/users/${params.id}`, //using by id
-      `/auth/users/update/${params.id}`, //using by id
-    ];
-    if (fetchRoute.includes(pathName)) {
-      fetchData();
-    } else {
-      setUser(null);
-    }
+    fetchData();
+    // //only auth data access this route
+    // const fetchRoute = [
+    //   "/",
+    //   "/auth/update-profile", //using token
+    //   "/auth/updatepassword", //using token
+    //   "/auth/profile",
+    //   "/auth/login",
+    //   "/auth/register",
+    //   "/auth/admin/users",
+    //   `/auth/admin/users/${params.id}`, //using by id
+    //   `/auth/admin/users/update/${params.id}`, //using by id
+    //   "/auth/admin/category",
+    // ];
+    // if (fetchRoute.includes(pathName)) {
+    //   fetchData();
+    // } else {
+    //   setUser(null);
+    // }
   }, [pathName]);
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>

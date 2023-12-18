@@ -6,43 +6,39 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const SinglePage = ({ params }) => {
-  const [user, setUser] = useState(null);
+  const [category, setCategory] = useState(null);
   useEffect(() => {
-    fetch(`/api/auth/users/${params.id}`)
+    fetch(`/api/category/${params.id}`)
       .then((res) => res.json())
-      .then((data) => setUser(data.user));
+      .then((data) => setCategory(data.category));
   }, []);
 
   const router = useRouter();
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`/api/auth/users/${params.id}`);
+      const response = await axios.delete(`/api/category/${params.id}`);
       const data = await response.data;
       toast.success(data.msg);
-      router.push("/auth/users");
+      router.push("/auth/admin/category");
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
   };
 
-  // if (!user) {
-  //   return <Loading />;
-  // }
-
   return (
     <>
       <div className="min-h-[85vh] flex flex-col justify-center items-center">
         <h4 className="mb-5 text-2xl text-gray-400 underline italic font-bold">
-          User Information
+          Category Info
         </h4>
         <div className=" flex flex-col gap-3 sm:w-4/5 lg:w-3/5 bg-gray-400 p-5 rounded-md text-white">
-          <p>Name: {user?.name}</p>
-          <p>Email: {user?.email}</p>
-          <p>Phone:</p>
+          <p>Name: {category?.name}</p>
           <div className="flex gap-4">
             <p className="bg-blue-400 p-2 rounded-md">
-              <Link href={`/auth/users/update/${params.id}`}>Update</Link>
+              <Link href={`/auth/admin/category/update/${params.id}`}>
+                Update
+              </Link>
             </p>
             <p className="bg-red-400 p-2 rounded-md">
               <button onClick={handleDelete}>Delete</button>

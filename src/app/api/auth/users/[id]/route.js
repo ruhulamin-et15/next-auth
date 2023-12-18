@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { VerifyToken } from "@/lib/service/Token.service";
 
 //get single user by id
 export const GET = async (req) => {
@@ -15,12 +15,10 @@ export const GET = async (req) => {
       );
     }
 
-    const tokenValue = token.value || "";
-    const decodedToken = jwt.decode(tokenValue);
-    const isAdmin = decodedToken?.admin;
+    const { admin } = await VerifyToken(token.value);
 
-    //admin check by token
-    if (!isAdmin) {
+    //admin check by token value
+    if (!admin) {
       return NextResponse.json(
         { error: "Only admin see details user" },
         { status: 402 }
@@ -57,12 +55,10 @@ export const DELETE = async (req) => {
       );
     }
 
-    const tokenValue = token.value || "";
-    const decodedToken = jwt.decode(tokenValue);
-    const isAdmin = decodedToken?.admin;
+    const { admin } = await VerifyToken(token.value);
 
     //admin check by token
-    if (!isAdmin) {
+    if (!admin) {
       return NextResponse.json(
         { error: "Only admin delete this user" },
         { status: 402 }
@@ -100,12 +96,10 @@ export const PUT = async (req) => {
       );
     }
 
-    const tokenValue = token.value || "";
-    const decodedToken = jwt.decode(tokenValue);
-    const isAdmin = decodedToken?.admin;
+    const { admin } = await VerifyToken(token.value);
 
     //admin check
-    if (!isAdmin) {
+    if (!admin) {
       return NextResponse.json(
         { error: "Only admin update this user" },
         { status: 402 }
@@ -113,11 +107,11 @@ export const PUT = async (req) => {
     }
     await connectDB();
     const id = req.url.split("users/")[1];
-    const { name, email } = await req.json();
+    const { name, email, phone, country, isAdmin, isBanned } = await req.json();
 
     const updatedUser = await UserModel.findByIdAndUpdate(
       id,
-      { $set: { name, email } },
+      { $set: { name, email, phone, country, isAdmin, isBanned } },
       { new: true, runValidators: true }
     ).select("-password");
 

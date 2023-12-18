@@ -5,35 +5,35 @@ import bcrypt from "bcryptjs";
 import { UserModel } from "@/lib/models/User";
 
 export const PUT = async (req) => {
-  connectDB();
   try {
-    const { password, cpassword } = await req.json();
-
-    if (cpassword !== password) {
-      return NextResponse.json(
-        {
-          error: "New Password & Confirm New Password are not match",
-        },
-        { status: 404 }
-      );
-    }
-
     //logged in check
     const isLoggedIn = req.cookies.get("token") || "";
     if (!isLoggedIn) {
       return NextResponse.json(
         { error: "Please login first" },
-        { status: 400 }
+        { status: 401 }
+      );
+    }
+
+    const { password, cpassword } = await req.json();
+    if (cpassword !== password) {
+      return NextResponse.json(
+        {
+          error: "New Password & Confirm Password are not match",
+        },
+        { status: 401 }
       );
     }
 
     //token check
     const { userId } = await VerifyToken(isLoggedIn.value);
     if (!userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 404 });
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+
+    await connectDB();
     await UserModel.findByIdAndUpdate(userId, {
       $set: {
         password: hashPassword,

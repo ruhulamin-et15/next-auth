@@ -18,6 +18,8 @@ const Profile = () => {
         <div className=" lg:w-2/4 md:w-4/5 sm:w-5/6 bg-blue-400 p-4 rounded-md">
           <p className="text-xl mb-2 text-white">Name: {user.name}</p>
           <p className="text-xl mb-2 text-white">Email: {user.email}</p>
+          <p className="text-xl mb-2 text-white">Phone: {user.phone}</p>
+          <p className="text-xl mb-2 text-white">Country: {user.country}</p>
           <div className="flex gap-3">
             <p className="bg-orange-400 w-2/6 px-1 text-center py-1 rounded-md hover:bg-green-400">
               <Link href={"/auth/update-profile"}>Update Info</Link>

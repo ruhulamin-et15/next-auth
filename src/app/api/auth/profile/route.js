@@ -3,23 +3,26 @@ import { UserModel } from "@/lib/models/User";
 import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
+//this formula is perfect for get data
 export const GET = async (request) => {
-  await connectDB();
   try {
-    const auth = request.cookies.get("token") || "";
-    if (!auth) {
+    //login check by token
+    const isLoggedIn = request.cookies.get("token") || "";
+    if (!isLoggedIn) {
       return NextResponse.json(
         { error: "Please login first" },
         { status: 401 }
       );
     }
 
-    const { userId } = await VerifyToken(auth.value);
-
+    //verify token
+    const { userId } = await VerifyToken(isLoggedIn.value);
     if (!userId) {
       return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
     }
 
+    // user find by id from cookies id
+    await connectDB();
     const existUser = await UserModel.findById(userId).select("-password");
 
     if (!existUser) {

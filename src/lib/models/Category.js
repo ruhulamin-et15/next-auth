@@ -7,11 +7,6 @@ const CategorySchema = new mongoose.Schema(
       required: [true, "Category Name is required"],
       minLength: [3, "The length of category name can be minimum 3 characters"],
     },
-    slug: {
-      type: String,
-      required: [true, "Category slug is required"],
-      lowercase: true,
-    },
   },
   { timestamps: true }
 );

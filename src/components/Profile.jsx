@@ -18,6 +18,12 @@ const Profile = () => {
             <p className="font-semibold text-2xl">Email: {user?.email}</p>
           </div>
           <div className="mb-2">
+            <p className="font-semibold text-2xl">Phone: {user?.phone}</p>
+          </div>
+          <div className="mb-2">
+            <p className="font-semibold text-2xl">Country: {user?.country}</p>
+          </div>
+          <div className="mb-2">
             <Link
               className="border border-green-400 px-4 py-1 rounded-lg bg-blue-500"
               href={"/auth/update-profile"}

@@ -13,6 +13,8 @@ const UpdateProfile = () => {
   const validationSchema = yup.object({
     name: yup.string().required("Name is required"),
     email: yup.string().email("Email must valid").required("Email is required"),
+    phone: yup.string().required("Phone is required"),
+    country: yup.string().required("Country is required"),
   });
 
   const handleSubmit = async (e) => {
@@ -67,6 +69,36 @@ const UpdateProfile = () => {
               />
               <ErrorMessage
                 name="email"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone">Phone:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="Enter your Phone"
+              />
+              <ErrorMessage
+                name="Phone"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country">Country:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="text"
+                name="country"
+                id="country"
+                placeholder="Enter your Email"
+              />
+              <ErrorMessage
+                name="country"
                 component={"p"}
                 className="text-red-500"
               />

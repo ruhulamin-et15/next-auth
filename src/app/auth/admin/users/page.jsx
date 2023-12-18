@@ -1,5 +1,4 @@
 "use client";
-import Loading from "@/components/Loading";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -28,7 +27,9 @@ const Users = () => {
 
               <div className="flex gap-3">
                 <p className="bg-gray-500 w-1/4 px-3 py-2 rounded-md mt-5 text-center">
-                  <Link href={`/auth/users/${item._id}`}>See Details</Link>
+                  <Link href={`/auth/admin/users/${item._id}`}>
+                    See Details
+                  </Link>
                 </p>
                 <p className="bg-red-500 w-1/4 px-3 py-2 rounded-md mt-5 text-center">
                   <button

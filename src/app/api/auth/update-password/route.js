@@ -5,32 +5,31 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 export const PUT = async (request) => {
-  connectDB();
+  //login check
+  const isLoggedIn = token || "";
+  if (!isLoggedIn) {
+    return NextResponse.json({ error: "Please login first" }, { status: 401 });
+  }
 
+  await connectDB();
   const { email, password, cpassword, token } = await request.json();
-
   if (cpassword !== password) {
     return NextResponse.json(
-      { error: "Password & Confirm Password are not match" },
-      { status: 400 }
+      { error: "New Password & Confirm Password are not match" },
+      { status: 401 }
     );
   }
 
-  const auth = token || "";
-
-  if (!auth) {
-    return NextResponse.json({ error: "Please login first" }, { status: 400 });
-  }
-
-  const { userId } = await VerifyForgetToken(auth, email);
+  //token verify
+  const { userId } = await VerifyForgetToken(isLoggedIn, email);
   if (!userId) {
-    return NextResponse.json({ error: "Invalid Token" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
   }
 
+  //user check
   const existUser = await UserModel.findById(userId);
-
   if (!existUser) {
-    return NextResponse.json({ error: "User does not found" }, { status: 404 });
+    return NextResponse.json({ error: "User does not found" }, { status: 401 });
   }
 
   const hashPassword = await bcrypt.hash(password, 10);

@@ -17,12 +17,19 @@ const Register = () => {
       .string()
       .min(6, "Password must be grater than 6 characters")
       .required("Password is required"),
+    phone: yup
+      .string()
+      .min(11, "Phone must be grater than 11 characters")
+      .required("Phone is required"),
+    country: yup.string().required("Country is required"),
   });
 
   const initialValue = {
     name: "",
     email: "",
     password: "",
+    phone: "",
+    country: "",
   };
 
   const handleSubmit = async (e, { resetForm }) => {
@@ -92,6 +99,36 @@ const Register = () => {
               />
               <ErrorMessage
                 name="password"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone">Phone:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="Enter your Phone"
+              />
+              <ErrorMessage
+                name="phone"
+                component={"p"}
+                className="text-red-500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country">Country:</label>
+              <Field
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                type="text"
+                name="country"
+                id="country"
+                placeholder="Enter your Country"
+              />
+              <ErrorMessage
+                name="country"
                 component={"p"}
                 className="text-red-500"
               />

@@ -37,7 +37,10 @@ const Navbar = () => {
           <nav className="md:ml-auto flex items-center text-base justify-center">
             {user ? (
               <>
-                <Link href={"/auth/users"} className="mr-5 hover:text-gray-900">
+                <Link
+                  href={"/auth/admin/users"}
+                  className="mr-5 hover:text-gray-900"
+                >
                   Users Update
                 </Link>
                 <Link

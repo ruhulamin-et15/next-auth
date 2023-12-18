@@ -15,6 +15,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
     },
+    phone: {
+      type: String,
+      required: [true, "Phone is required"],
+    },
+    country: {
+      type: String,
+      required: [true, "Country is required"],
+    },
     isAdmin: {
       type: Boolean,
       default: false,

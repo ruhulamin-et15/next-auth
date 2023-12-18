@@ -4,27 +4,28 @@ import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
 export const PUT = async (request) => {
-  connectDB();
-
-  const { name, email } = await request.json();
-
   //logged in check
-  const auth = request.cookies.get("token") || "";
-
-  if (!auth) {
+  const isLoggedIn = request.cookies.get("token") || "";
+  if (!isLoggedIn) {
     return NextResponse.json({ error: "Please login first" }, { status: 401 });
   }
 
-  //token check
-  const { userId } = await VerifyToken(auth.value);
+  //token verify
+  const { userId } = await VerifyToken(isLoggedIn.value);
   if (!userId) {
     return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
   }
 
+  await connectDB();
+  const { name, email, phone, country } = await request.json();
+
+  //user update using id from cookies
   const existUser = await UserModel.findByIdAndUpdate(userId, {
     $set: {
       name,
       email,
+      phone,
+      country,
     },
   });
 
