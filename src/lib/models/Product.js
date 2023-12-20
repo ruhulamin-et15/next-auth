@@ -7,12 +7,6 @@ const ProductSchema = new mongoose.Schema({
     trim: true,
     minlength: [3, "The length of product name can be minimum 3 characters"],
   },
-  slug: {
-    type: String,
-    required: [true, "Product slug is required"],
-    lowercase: true,
-    unique: true,
-  },
   desc: {
     type: String,
     required: [true, "Product desc is required"],
@@ -42,12 +36,12 @@ const ProductSchema = new mongoose.Schema({
   },
   sold: {
     type: Number,
-    required: [true, "sold quantity is required"],
     trim: true,
     default: 0,
   },
   shipping: {
     type: Number,
+    trim: true,
     default: 0, //shipping free or paid amount
   },
   image: {

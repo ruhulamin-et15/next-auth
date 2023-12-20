@@ -1,5 +1,4 @@
 "use client";
-import Loading from "@/app/loading";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,7 +28,7 @@ const SinglePage = ({ params }) => {
 
   return (
     <>
-      <div className="min-h-[85vh] flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center">
         <h4 className="mb-5 text-2xl text-gray-400 underline italic font-bold">
           User Information
         </h4>

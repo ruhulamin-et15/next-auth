@@ -2,24 +2,31 @@
 import Loading from "@/components/Loading";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
-import * as yup from "yup";
 
 const UpdateProfile = () => {
   const { user } = useAuth();
-  const router = useRouter();
-  const validationSchema = yup.object({
-    name: yup.string().required("Name is required"),
-    email: yup.string().email("Email must valid").required("Email is required"),
-    phone: yup.string().required("Phone is required"),
-    country: yup.string().required("Country is required"),
-  });
+  if (!user) {
+    return <Loading />;
+  }
 
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [country, setCountry] = useState(user?.country || "");
+
+  const router = useRouter();
   const handleSubmit = async (e) => {
     try {
-      const res = await axios.put("/api/auth/update-profile", e);
+      e.preventDefault();
+      const res = await axios.put("/api/auth/update-profile", {
+        name,
+        email,
+        phone,
+        country,
+      });
       const data = await res.data;
       toast.success(data.msg);
       router.push("/");
@@ -28,92 +35,76 @@ const UpdateProfile = () => {
     }
   };
 
-  if (!user) {
-    return <Loading />;
-  }
   return (
     <>
-      <div className="min-h-[82vh] w-full flex items-center justify-center">
-        <Formik
-          validationSchema={validationSchema}
-          initialValues={user}
-          onSubmit={handleSubmit}
-        >
-          <Form className=" w-3/6 mx-auto">
-            <h2 className="mb-8 text-center text-2xl font-semibold underline">
-              Update Profile
-            </h2>
+      <div className="lg:min-h-screen flex flex-col items-center lg:justify-center">
+        <h2 className="py-4 text-center text-2xl font-semibold underline">
+          Update Profile
+        </h2>
+        <div className="bg-green-300 lg:rounded-lg lg:w-3/5 md:w-4/5 w-full">
+          <form onSubmit={handleSubmit} className="mt-5 p-10">
             <div className="mb-3">
               <label htmlFor="name">Name:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="text"
                 name="name"
-                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your Name"
-              />
-              <ErrorMessage
-                name="name"
-                component={"p"}
-                className="text-red-500"
+                required
               />
             </div>
             <div className="mb-3">
               <label htmlFor="email">Email:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your Email"
-              />
-              <ErrorMessage
-                name="email"
-                component={"p"}
-                className="text-red-500"
+                required
               />
             </div>
             <div className="mb-3">
               <label htmlFor="phone">Phone:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="tel"
                 name="phone"
                 id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter your Phone"
-              />
-              <ErrorMessage
-                name="Phone"
-                component={"p"}
-                className="text-red-500"
+                required
               />
             </div>
             <div className="mb-3">
               <label htmlFor="country">Country:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="text"
                 name="country"
                 id="country"
-                placeholder="Enter your Email"
-              />
-              <ErrorMessage
-                name="country"
-                component={"p"}
-                className="text-red-500"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Enter your Country"
+                required
               />
             </div>
 
-            <div className="mb-2">
+            <div className="mt-4 flex lg:justify-end">
               <button
                 type="submit"
-                className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
+                className="w-full lg:w-1/5 text-center text-white bg-green-500 rounded-lg px-4 py-2"
               >
                 Update
               </button>
             </div>
-          </Form>
-        </Formik>
+          </form>
+        </div>
       </div>
     </>
   );

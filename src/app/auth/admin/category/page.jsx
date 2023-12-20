@@ -3,7 +3,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import * as yup from "yup";
-import Categories from "@/components/Categories";
+import GetCategories from "@/components/Categories";
 
 const Category = () => {
   const validationSchema = yup.object({
@@ -66,7 +66,7 @@ const Category = () => {
         </Formik>
       </div>
       <div className="w-full flex flex-col items-center justify-center">
-        <Categories />
+        <GetCategories />
       </div>
     </>
   );

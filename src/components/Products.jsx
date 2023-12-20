@@ -2,12 +2,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const GetCategories = () => {
-  const [categories, setCategories] = useState(null);
+const GetProducts = () => {
+  const [products, setProducts] = useState(null);
   useEffect(() => {
-    fetch("/api/category")
+    fetch("/api/products")
       .then((res) => res.json())
-      .then((data) => setCategories(data.categories));
+      .then((data) => setProducts(data.products));
   }, []);
   return (
     <>
@@ -17,16 +17,16 @@ const GetCategories = () => {
         </h3>
         <div className="flex">
           <div className="grid gap-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-            {categories?.map((category) => {
+            {products?.map((product) => {
               return (
                 <div>
                   <ul
                     className="text-xl bg-green-500 px-4 py-1 rounded-md"
-                    key={category._id}
+                    key={product._id}
                   >
-                    <li>{category.name}</li>
+                    <li>{product.name}</li>
                     <p className="bg-gray-400 rounded-md text-center">
-                      <Link href={`/auth/admin/category/${category._id}`}>
+                      <Link href={`/auth/products/${product._id}`}>
                         Details
                       </Link>
                     </p>
@@ -41,4 +41,4 @@ const GetCategories = () => {
   );
 };
 
-export default GetCategories;
+export default GetProducts;

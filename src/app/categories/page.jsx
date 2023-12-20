@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const GetCategories = () => {
+const Categories = () => {
   const [categories, setCategories] = useState(null);
   useEffect(() => {
     fetch("/api/category")
@@ -26,9 +26,7 @@ const GetCategories = () => {
                   >
                     <li>{category.name}</li>
                     <p className="bg-gray-400 rounded-md text-center">
-                      <Link href={`/auth/admin/category/${category._id}`}>
-                        Details
-                      </Link>
+                      <Link href={`/categories/${category._id}`}>Details</Link>
                     </p>
                   </ul>
                 </div>
@@ -41,4 +39,4 @@ const GetCategories = () => {
   );
 };
 
-export default GetCategories;
+export default Categories;

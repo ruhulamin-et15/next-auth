@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 const { createContext, useState, useContext, useEffect } = require("react");
 
 export const AuthContext = createContext();

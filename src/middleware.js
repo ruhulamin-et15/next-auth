@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { VerifyToken } from "./lib/service/Token.service";
 
-export const middleware = (request) => {
+export const middleware = async (request) => {
   const pathVariable = request.nextUrl.pathname;
 
   const publicRoute = [
@@ -12,6 +13,7 @@ export const middleware = (request) => {
     "/auth/register",
     "/auth/login",
     "/products/:path*",
+    "/categories/:path*",
   ];
 
   //user logic
