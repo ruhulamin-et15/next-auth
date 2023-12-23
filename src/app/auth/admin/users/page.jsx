@@ -34,6 +34,12 @@ const Users = () => {
                 Country
               </th>
               <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                Create Date
+              </th>
+              <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                Update Date
+              </th>
+              <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
                 Actions
               </th>
             </tr>
@@ -68,6 +74,18 @@ const Users = () => {
                     Country
                   </span>
                   {user.country}
+                </td>
+                <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                  <span className="inline-block w-1/3 md:hidden font-bold">
+                    Create Date
+                  </span>
+                  {user.createdAt}
+                </td>
+                <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                  <span className="inline-block w-1/3 md:hidden font-bold">
+                    Update Date
+                  </span>
+                  {user.updatedAt}
                 </td>
                 <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
                   <span className="inline-block w-1/3 md:hidden font-bold">

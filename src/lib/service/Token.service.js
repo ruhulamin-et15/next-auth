@@ -6,7 +6,7 @@ const FORGET = process.env.FORGET_JWT || "ssssaa";
 //user token generate
 export const GenerateToken = async (user) => {
   const token = await jwt.sign(
-    { userId: user._id, admin: user.isAdmin },
+    { userId: user._id, admin: user.isAdmin, userName: user.name },
     AUTH,
     {
       expiresIn: "1d",

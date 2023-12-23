@@ -1,5 +1,7 @@
 import { connectDB } from "@/lib/config/db";
 import { ProductModel } from "@/lib/models/Product";
+import { VerifyToken } from "@/lib/service/Token.service";
+
 import { NextResponse } from "next/server";
 
 //create product
@@ -14,6 +16,8 @@ export const POST = async (req) => {
       );
     }
 
+    const { userId } = await VerifyToken(token.value);
+
     await connectDB();
     const { name, desc, price, quantity, sold, shipping, image, category } =
       await req.json();
@@ -26,6 +30,7 @@ export const POST = async (req) => {
       shipping,
       image,
       category,
+      userId: userId,
     });
     return NextResponse.json(
       { msg: "Product created successfully", product },
@@ -43,7 +48,7 @@ export const POST = async (req) => {
 export const GET = async (req) => {
   try {
     await connectDB();
-    const products = await ProductModel.find({});
+    const products = await ProductModel.find({}).populate("category");
     if (!products) {
       return NextResponse.json(
         { error: "products not found" },

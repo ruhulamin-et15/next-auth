@@ -1,11 +1,26 @@
 "use client";
+import Loading from "@/app/loading";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import * as yup from "yup";
 
 const CreateProduct = () => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Loading />;
+  }
+  // const [name, setName] = useState("");
+  // const [desc, setDesc] = useState("");
+  // const [price, setPrice] = useState("");
+  // const [quantity, setQuantity] = useState("");
+  // const [sold, setSold] = useState("");
+  // const [shipping, setShipping] = useState("");
+  // const [image, setImage] = useState("");
+
   const validationSchema = yup.object({
     name: yup.string().required("Product Name is required"),
     desc: yup
@@ -18,6 +33,7 @@ const CreateProduct = () => {
     shipping: yup.number(),
     image: yup.mixed(),
     category: yup.string().required("category is required"),
+    // userId: yup.string().required("Please Refresh this page get to user ID"),
   });
   const initialaValue = {
     name: "",
@@ -38,7 +54,7 @@ const CreateProduct = () => {
       const data = await response.data;
       toast.success(data.msg);
       resetForm();
-      router.push("/auth/products");
+      router.push(`/auth/products/${user._id}`);
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
@@ -145,6 +161,23 @@ const CreateProduct = () => {
                 className="text-red-500"
               />
             </div>
+            <div className="flex flex-col">
+              <div className="w-full mb-1">
+                <label htmlFor="image">Image:</label>
+                <Field
+                  className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                  type="file"
+                  name="image"
+                  id="image"
+                  placeholder="Choose Product Image"
+                />
+                <ErrorMessage
+                  name="image"
+                  component={"p"}
+                  className="text-red-500"
+                />
+              </div>
+            </div>
             <div className="mb-3 w-full">
               <label htmlFor="desc">Description:</label>
               <Field
@@ -162,31 +195,12 @@ const CreateProduct = () => {
                 className="text-red-500"
               />
             </div>
-            <div className="flex flex-col">
-              <div className="w-full mb-1">
-                <label htmlFor="image">Image:</label>
-                <Field
-                  className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                  type="file"
-                  name="image"
-                  id="image"
-                  placeholder="Choose Product Image"
-                />
-                <ErrorMessage
-                  name="image"
-                  component={"p"}
-                  className="text-red-500"
-                />
-              </div>
-              <div className="mt-6">
-                <button
-                  type="submit"
-                  className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
-                >
-                  Add Product
-                </button>
-              </div>
-            </div>
+            <button
+              type="submit"
+              className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
+            >
+              Add Product
+            </button>
           </Form>
         </Formik>
       </div>

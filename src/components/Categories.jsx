@@ -11,31 +11,22 @@ const GetCategories = () => {
   }, []);
   return (
     <>
-      <div>
-        <h3 className="text-center mb-3 text-2xl underline italic font-semibold">
-          Category Name
-        </h3>
-        <div className="flex">
-          <div className="grid gap-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-            {categories?.map((category) => {
-              return (
-                <div>
-                  <ul
-                    className="text-xl bg-green-500 px-4 py-1 rounded-md"
-                    key={category._id}
-                  >
-                    <li>{category.name}</li>
-                    <p className="bg-gray-400 rounded-md text-center">
-                      <Link href={`/auth/admin/category/${category._id}`}>
-                        Details
-                      </Link>
-                    </p>
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      <h3 className="text-center mb-3 text-2xl underline italic font-semibold">
+        Categories
+      </h3>
+      <div className="p-4 grid gap-3 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 text-center">
+        {categories?.map((category) => {
+          return (
+            <div
+              className="text-xl bg-green-500 py-1 lg:py-6 md:py-4 sm:py-3 rounded-md"
+              key={category._id}
+            >
+              <Link href={`/auth/admin/category/${category._id}`}>
+                <p>{category.name}</p>
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </>
   );

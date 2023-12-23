@@ -3,12 +3,13 @@ import { UserModel } from "@/lib/models/User";
 import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
+//get profile info
 //this formula is perfect for get data
 export const GET = async (request) => {
   try {
     //login check by token
-    const isLoggedIn = request.cookies.get("token") || "";
-    if (!isLoggedIn) {
+    const token = request.cookies.get("token") || "";
+    if (!token) {
       return NextResponse.json(
         { error: "Please login first" },
         { status: 401 }
@@ -16,7 +17,7 @@ export const GET = async (request) => {
     }
 
     //verify token
-    const { userId } = await VerifyToken(isLoggedIn.value);
+    const { userId } = await VerifyToken(token.value);
     if (!userId) {
       return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
     }

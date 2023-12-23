@@ -16,6 +16,8 @@ export const POST = async (request) => {
     }
 
     const { admin } = await VerifyToken(token.value);
+    const { userName } = await VerifyToken(token.value);
+    const { userId } = await VerifyToken(token.value);
 
     //admin check
     if (!admin) {
@@ -39,6 +41,8 @@ export const POST = async (request) => {
 
     const newCategory = await CategoryModel.create({
       name,
+      creatorName: userName,
+      creatorId: userId,
     });
     return NextResponse.json(
       { msg: "Category Created Successfully", newCategory },

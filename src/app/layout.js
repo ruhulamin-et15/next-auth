@@ -16,8 +16,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <Navbar />
-          <div className="lg:mx-20 bg-gray-300 lg:rounded-sm min-h-[90vh]">
+          <div className="fixed w-full bg-gray-500">
+            <Navbar />
+          </div>
+
+          <div className="lg:mx-20 pt-20 bg-gray-300 lg:rounded-sm min-h-screen">
             {children}
           </div>
           <Footer />
