@@ -2,11 +2,13 @@ import { connectDB } from "@/lib/config/db";
 import { ProductModel } from "@/lib/models/Product";
 import { NextResponse } from "next/server";
 
-//get single product
+//get single product for everyone
 export const GET = async (req) => {
   try {
-    const id = await req.url.split("products/")[1];
-    const singleProduct = await ProductModel.findById(id);
+    const id = req.url.split("products/")[1];
+    const singleProduct = await ProductModel.findById(id)
+      .populate("category")
+      .populate("creater");
     if (!singleProduct) {
       return NextResponse.json({ error: "product not found" }, { status: 401 });
     }
@@ -36,6 +38,7 @@ export const PUT = async (req) => {
     const id = await req.url.split("products/")[1];
     const { name, desc, price, quantity, sold, shipping, image, category } =
       await req.json();
+
     await connectDB();
     const updateProduct = await ProductModel.findByIdAndUpdate(
       id,

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 //get all products filter by category
@@ -37,6 +38,12 @@ const SingleCategory = ({ params }) => {
                 <p>Quantity: {product.quantity}</p>
                 <p>Shipping Charge: {product.shipping}</p>
                 <p>Sold: {product.sold}</p>
+                <Link
+                  href={`/categories/${category?._id}/get-product/${product._id}`}
+                >
+                  <p>Details</p>
+                </Link>
+                <Link href={`/`}>Add To Cart</Link>
               </div>
             ))}
           </div>

@@ -44,10 +44,10 @@ const SinglePage = ({ params }) => {
             <div className="w-full">
               <p className="text-xl mb-2 text-gray-600">{category?.name}</p>
               <p className="text-xl mb-2 text-gray-600">
-                {category?.creatorName}
+                {category?.creater.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                {category?.creatorId}
+                {category?.creater._id}
               </p>
               <p className="text-xl mb-2 text-gray-600">
                 {category?.createdAt}

@@ -13,7 +13,7 @@ const GetProducts = () => {
   return (
     <>
       <p className="text-center text-3xl font-semibold underline mb-4">
-        Top Recent Products
+        All Products
       </p>
       <div className="flex flex-col">
         <div className="px-4 my-4 grid gap-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
@@ -32,7 +32,7 @@ const GetProducts = () => {
               <p>Sold: {product.sold}</p>
               <div>
                 <Link
-                  href={`/products/${product._id}`}
+                  href={`/auth/admin/products/${product._id}`}
                   className="border px-2 rounded-md bg-gray-400"
                 >
                   Details

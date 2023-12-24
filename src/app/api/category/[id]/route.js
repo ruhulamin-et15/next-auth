@@ -8,7 +8,7 @@ export const GET = async (req) => {
   try {
     await connectDB();
     const id = req.url.split("category/")[1];
-    const category = await CategoryModel.findById(id);
+    const category = await CategoryModel.findById(id).populate("creater");
 
     if (!category) {
       return NextResponse.json(

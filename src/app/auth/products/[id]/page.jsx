@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const UserProducts = ({ params }) => {
@@ -25,11 +26,17 @@ const UserProducts = ({ params }) => {
               >
                 <p>Product Name: {product.name}</p>
                 <p>Product Category: {product.category.name}</p>
+                <p>Product Creater: {product.creater.name}</p>
                 <p>Description: {product.desc}</p>
                 <p>Price: {product.price}</p>
                 <p>Quantity: {product.quantity}</p>
                 <p>Shipping Charge: {product.shipping}</p>
                 <p>Sold: {product.sold}</p>
+                <Link
+                  href={`/auth/products/${params.id}/get-product/${product._id}`}
+                >
+                  Edit
+                </Link>
               </div>
             ))}
           </div>

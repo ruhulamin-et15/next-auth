@@ -42,7 +42,9 @@ const SinglePage = ({ params }) => {
 
           <div className="flex gap-4">
             <p className="bg-blue-400 p-2 rounded-md">
-              <Link href={`/auth/admin/users/update/${params.id}`}>Update</Link>
+              <Link href={`/auth/admin/users/update-user/${params.id}`}>
+                Update
+              </Link>
             </p>
             <p className="bg-red-400 p-2 rounded-md">
               <button onClick={handleDelete}>Delete</button>

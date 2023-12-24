@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 const GetCategories = () => {
   const [categories, setCategories] = useState(null);
+
   useEffect(() => {
     fetch("/api/category")
       .then((res) => res.json())

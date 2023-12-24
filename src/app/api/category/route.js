@@ -41,8 +41,7 @@ export const POST = async (request) => {
 
     const newCategory = await CategoryModel.create({
       name,
-      creatorName: userName,
-      creatorId: userId,
+      creater: userId,
     });
     return NextResponse.json(
       { msg: "Category Created Successfully", newCategory },
@@ -61,7 +60,7 @@ export const POST = async (request) => {
 export const GET = async (req) => {
   try {
     await connectDB();
-    const categories = await CategoryModel.find({});
+    const categories = await CategoryModel.find({}).populate("creater");
     return NextResponse.json(
       { msg: "get categories success", categories },
       { status: 200 }

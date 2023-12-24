@@ -2,13 +2,15 @@ import { connectDB } from "@/lib/config/db";
 import { ProductModel } from "@/lib/models/Product";
 import { NextResponse } from "next/server";
 
-// get all products an user
+// get all products by userId for an user
 export const GET = async (req) => {
   try {
     await connectDB();
-    const userId = req.url.split("user-products/")[1];
+    const creater = req.url.split("user-products/")[1];
 
-    const products = await ProductModel.find({ userId }).populate("category");
+    const products = await ProductModel.find({ creater })
+      .populate("category")
+      .populate("creater");
     if (!products) {
       return NextResponse.json({ error: "not found products" });
     }

@@ -1,59 +1,46 @@
 "use client";
-import Loading from "@/app/loading";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import * as yup from "yup";
 
 const CreateProduct = () => {
+  const [categories, setCategories] = useState();
   const { user } = useAuth();
-  if (!user) {
-    return <Loading />;
-  }
-  // const [name, setName] = useState("");
-  // const [desc, setDesc] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [quantity, setQuantity] = useState("");
-  // const [sold, setSold] = useState("");
-  // const [shipping, setShipping] = useState("");
-  // const [image, setImage] = useState("");
 
-  const validationSchema = yup.object({
-    name: yup.string().required("Product Name is required"),
-    desc: yup
-      .string()
-      .min(10, "Description must be grater than 10 characters")
-      .required("Description is required"),
-    price: yup.number().required("Price is required"),
-    quantity: yup.number().required("quantity is required"),
-    sold: yup.number(),
-    shipping: yup.number(),
-    image: yup.mixed(),
-    category: yup.string().required("category is required"),
-    // userId: yup.string().required("Please Refresh this page get to user ID"),
-  });
-  const initialaValue = {
-    name: "",
-    desc: "",
-    price: "",
-    sold: 0,
-    shipping: 0,
-    quantity: "",
-    image: "",
-    category: "",
-  };
+  useEffect(() => {
+    fetch(`/api/category`)
+      .then((res) => res.json())
+      .then((data) => setCategories(data.categories));
+  }, []);
+
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [price, setPrice] = useState("");
+  const [sold, setSold] = useState(0);
+  const [shipping, setShipping] = useState(0);
+  const [quantity, setQuantity] = useState("");
+  const [image, setImage] = useState("");
+  const [category, setCategory] = useState();
 
   const router = useRouter();
 
-  const handleSubmit = async (e, { resetForm }) => {
+  const handleSubmit = async (e) => {
     try {
-      const response = await axios.post("/api/products", e);
+      e.preventDefault();
+      const response = await axios.post("/api/products", {
+        name,
+        desc,
+        price,
+        sold,
+        shipping,
+        quantity,
+        image,
+        category,
+      });
       const data = await response.data;
       toast.success(data.msg);
-      resetForm();
       router.push(`/auth/products/${user._id}`);
     } catch (error) {
       toast.error(error?.response?.data?.error);
@@ -65,144 +52,119 @@ const CreateProduct = () => {
         Add Your Product
       </h2>
       <div className="bg-green-300 rounded-md lg:w-9/12 md:w-4/5 sm:w-full mx-auto">
-        <Formik
-          validationSchema={validationSchema}
-          initialValues={initialaValue}
-          onSubmit={handleSubmit}
-        >
-          <Form className="p-4 grid lg:gap-10 lg:grid-cols-2">
-            <div className="mb-3">
+        <form onSubmit={handleSubmit}>
+          <div className="p-4 grid lg:gap-10 lg:grid-cols-2">
+            <div className="mb-1">
               <label htmlFor="name">Product Name:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Enter Your Product Name"
-              />
-              <ErrorMessage
-                name="name"
-                component={"p"}
-                className="text-red-500"
+                value={name}
+                placeholder="Enter Product Name"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="price">Price:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="number"
                 name="price"
                 id="price"
+                value={price}
                 placeholder="Enter Product Price"
-              />
-              <ErrorMessage
-                name="price"
-                component={"p"}
-                className="text-red-500"
+                onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="quantity">Quantity:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="number"
                 name="quantity"
                 id="quantity"
+                value={quantity}
                 placeholder="Enter Product Quantity"
-              />
-              <ErrorMessage
-                name="quantity"
-                component={"p"}
-                className="text-red-500"
+                onChange={(e) => setQuantity(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="sold">Sold:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="number"
                 name="sold"
                 id="sold"
+                value={sold}
                 placeholder="Enter Product Sold"
-              />
-              <ErrorMessage
-                name="sold"
-                component={"p"}
-                className="text-red-500"
+                onChange={(e) => setSold(e.target.value)}
               />
             </div>
             <div className="mb-1">
               <label htmlFor="shipping">Shipping Charge:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 type="number"
                 name="shipping"
                 id="shipping"
+                value={shipping}
                 placeholder="Enter Shipping Charge"
-              />
-              <ErrorMessage
-                name="shipping"
-                component={"p"}
-                className="text-red-500"
+                onChange={(e) => setShipping(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="category">Category:</label>
-              <Field
-                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
-                type="text"
+              <select
                 name="category"
                 id="category"
-                placeholder="Enter Product Category"
-              />
-              <ErrorMessage
-                name="category"
-                component={"p"}
-                className="text-red-500"
-              />
+                value={category}
+                className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="0">Select Category</option>
+                {categories?.map((category) => (
+                  <option value={category._id}>{category.name}</option>
+                ))}
+              </select>
             </div>
             <div className="flex flex-col">
               <div className="w-full mb-1">
                 <label htmlFor="image">Image:</label>
-                <Field
+                <input
                   className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                   type="file"
                   name="image"
                   id="image"
+                  value={image}
                   placeholder="Choose Product Image"
-                />
-                <ErrorMessage
-                  name="image"
-                  component={"p"}
-                  className="text-red-500"
+                  onChange={(e) => setImage(e.target.value)}
                 />
               </div>
             </div>
-            <div className="mb-3 w-full">
+            <div className="mb-1 w-full">
               <label htmlFor="desc">Description:</label>
-              <Field
+              <input
                 className="w-full py-2 px-4 rounded-lg ring-2 ring-indigo-400 outline-none border-none"
                 component="textarea"
                 rows="4"
                 type="text"
                 name="desc"
                 id="desc"
+                value={desc}
                 placeholder="Product Description"
-              />
-              <ErrorMessage
-                name="desc"
-                component={"p"}
-                className="text-red-500"
+                onChange={(e) => setDesc(e.target.value)}
               />
             </div>
-            <button
-              type="submit"
-              className="w-full text-center text-white bg-green-500 rounded-lg px-4 py-2"
-            >
-              Add Product
-            </button>
-          </Form>
-        </Formik>
+          </div>
+          <button
+            type="submit"
+            className="text-center text-white bg-green-500 rounded-lg px-4 py-2"
+          >
+            Add Product
+          </button>
+        </form>
       </div>
     </>
   );

@@ -54,8 +54,9 @@ const ProductSchema = new mongoose.Schema({
     ref: "Category",
     required: true,
   },
-  userId: {
-    type: String,
+  creater: {
+    type: mongoose.ObjectId,
+    ref: "User",
     required: true,
   },
 });

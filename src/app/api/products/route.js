@@ -4,7 +4,7 @@ import { VerifyToken } from "@/lib/service/Token.service";
 
 import { NextResponse } from "next/server";
 
-//create product
+//create product for login user
 export const POST = async (req) => {
   try {
     //login check
@@ -30,7 +30,7 @@ export const POST = async (req) => {
       shipping,
       image,
       category,
-      userId: userId,
+      creater: userId,
     });
     return NextResponse.json(
       { msg: "Product created successfully", product },
@@ -44,11 +44,14 @@ export const POST = async (req) => {
   }
 };
 
-//get products
+//get products for all users
 export const GET = async (req) => {
   try {
     await connectDB();
-    const products = await ProductModel.find({}).populate("category");
+    const products = await ProductModel.find({})
+      .populate("category")
+      .populate("creater")
+      .limit(4);
     if (!products) {
       return NextResponse.json(
         { error: "products not found" },

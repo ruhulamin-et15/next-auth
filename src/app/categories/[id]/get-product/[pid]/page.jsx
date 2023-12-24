@@ -8,7 +8,7 @@ const SingleProductPage = ({ params }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/api/products/${params.id}`);
+      const response = await axios.get(`/api/products/${params.pid}`);
       const data = await response.data;
       setProduct(data);
     };
