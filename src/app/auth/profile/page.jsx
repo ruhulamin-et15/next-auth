@@ -32,7 +32,7 @@ const Profile = () => {
           </div>
           <div className="flex gap-2 px-20 pb-4">
             <p className="bg-orange-400 w-1/2 px-1 text-center py-1 rounded-md hover:bg-green-600">
-              <Link href={"/auth/update-profile"}>Update Info</Link>
+              <Link href={"/auth/profile/update-profile"}>Update Info</Link>
             </p>
             <p className="bg-orange-400 w-1/2 px-1 text-center py-1 rounded-md hover:bg-green-600">
               <Link href={"/auth/updatepassword"}>Update Password</Link>

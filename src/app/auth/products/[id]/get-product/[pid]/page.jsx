@@ -2,7 +2,9 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const SingleProductPage = ({ params }) => {
   const { user } = useAuth();
@@ -17,6 +19,21 @@ const SingleProductPage = ({ params }) => {
 
     fetchData();
   }, []);
+
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(
+        `/api/products/user-products/${params.pid}`
+      );
+      const data = res.data;
+      toast.success(data.msg);
+      router.push(`/auth/products/${user._id}`);
+    } catch (error) {
+      toast.error(error?.response?.data?.error);
+    }
+  };
 
   return (
     <>
@@ -47,10 +64,10 @@ const SingleProductPage = ({ params }) => {
                 {product?.singleProduct.category?.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.quantity}
+                {product?.singleProduct.quantity}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.sold}
+                {product?.singleProduct.sold}
               </p>
               <p className="text-xl mb-2 text-gray-600">
                 ${product?.singleProduct.price}
@@ -59,19 +76,18 @@ const SingleProductPage = ({ params }) => {
                 {product?.singleProduct.creater?.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                {product?.singleProduct.shipping}
+                ${product?.singleProduct.shipping}
               </p>
             </div>
-            <p className=" text-center bg-blue-400 p-2 rounded-md">
-              <Link
-                href={`/auth/products/${user?._id}/update-product/${params.pid}`}
-              >
-                Update
-              </Link>
-            </p>
-            <p className=" text-center bg-red-400 p-2 rounded-md">
-              <button>Delete</button>
-            </p>
+            <Link
+              href={`/auth/products/${user?._id}/update-product/${params.pid}`}
+            >
+              <p className=" text-center bg-blue-400 p-2 rounded-md">Update</p>
+            </Link>
+
+            <button onClick={handleDelete}>
+              <p className=" text-center bg-red-400 p-2 rounded-md">Delete</p>
+            </button>
           </div>
         </div>
         <p></p>

@@ -50,12 +50,12 @@ const ProductSchema = new mongoose.Schema({
     // required: [true, "Product image is required"],
   },
   category: {
-    type: mongoose.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
   },
   creater: {
-    type: mongoose.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },

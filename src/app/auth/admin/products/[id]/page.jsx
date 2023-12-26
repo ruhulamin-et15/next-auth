@@ -1,7 +1,9 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const SingleProductPage = ({ params }) => {
   const [product, setProduct] = useState(null);
@@ -15,6 +17,19 @@ const SingleProductPage = ({ params }) => {
 
     fetchData();
   }, []);
+
+  const router = useRouter();
+
+  const handleClick = async () => {
+    try {
+      const res = await axios.delete(`/api/products/${params.id}`);
+      const data = await res.data;
+      toast.success(data.msg);
+      router.push(`/auth/admin/products`);
+    } catch (error) {
+      toast.error(error?.response?.data?.error);
+    }
+  };
 
   return (
     <>
@@ -66,7 +81,7 @@ const SingleProductPage = ({ params }) => {
               </Link>
             </p>
             <p className=" text-center bg-red-400 p-2 rounded-md">
-              <button>Delete</button>
+              <button onClick={handleClick}>Delete</button>
             </p>
           </div>
         </div>

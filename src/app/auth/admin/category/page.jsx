@@ -47,6 +47,7 @@ const Category = () => {
                   name="name"
                   id="name"
                   placeholder="Enter Category Name"
+                  autoFocus={true}
                 />
                 <ErrorMessage
                   name="name"

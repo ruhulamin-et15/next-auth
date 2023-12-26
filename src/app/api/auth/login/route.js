@@ -1,23 +1,27 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isBanned, isLoggedIn } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { GenerateToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  //login checked by token from cookies
-  const isLoggedIn = req.cookies.get("token") || "";
-
-  if (isLoggedIn) {
-    return NextResponse.json(
-      { error: "You alrady logged in" },
-      { status: 401 }
-    );
+  //check allready login
+  const loggedInResponse = await isLoggedIn(req);
+  try {
+    if (!loggedInResponse) {
+      return NextResponse.json(
+        { error: "You alrady logged in" },
+        { status: 401 }
+      );
+    }
+  } catch (error) {
+    return loggedInResponse;
   }
 
-  // // token decoded formula from cookies
-  // const tokenValue = isLoggedIn.value || "";
-  // const decodedToken = jwt.decode(tokenValue);
-  // const isBanned = decodedToken?.banned;
+  //check banned user
+  const bannedUserResponse = await isBanned(req);
+  if (bannedUserResponse) {
+    return bannedUserResponse;
+  }
 
   //this formula for POST use
   await connectDB();

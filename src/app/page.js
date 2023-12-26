@@ -1,6 +1,6 @@
 "use client";
 
-import GetProducts from "./products/page";
+import GetProducts from "@/components/Products";
 
 const HomePage = () => {
   return (

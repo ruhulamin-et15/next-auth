@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isAdmin, isLoggedIn } from "@/lib/config/db";
 import { ProductModel } from "@/lib/models/Product";
 import { NextResponse } from "next/server";
 
@@ -24,19 +24,23 @@ export const GET = async (req) => {
   }
 };
 
-//product update
+//product update for admin
 export const PUT = async (req) => {
   try {
-    const token = req.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please login first" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
+    }
+
+    //check admin
+    const adminResponse = await isAdmin(req);
+    if (adminResponse) {
+      return adminResponse;
     }
 
     const id = await req.url.split("products/")[1];
-    const { name, desc, price, quantity, sold, shipping, image, category } =
+    const { name, desc, price, quantity, sold, shipping, category } =
       await req.json();
 
     await connectDB();
@@ -50,7 +54,6 @@ export const PUT = async (req) => {
           quantity,
           sold,
           shipping,
-          image,
           category,
         },
       },
@@ -77,16 +80,21 @@ export const PUT = async (req) => {
   }
 };
 
-//product delete
+//product delete for admin
 export const DELETE = async (req) => {
   try {
-    const token = req.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "please login first" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
+
+    //check admin
+    const adminResponse = await isAdmin(req);
+    if (adminResponse) {
+      return adminResponse;
+    }
+
     const id = await req.url.split("products/")[1];
     await ProductModel.findByIdAndDelete(id);
     return NextResponse.json(

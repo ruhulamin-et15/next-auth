@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isLoggedIn } from "@/lib/config/db";
 import { ProductModel } from "@/lib/models/Product";
 import { VerifyToken } from "@/lib/service/Token.service";
 
@@ -7,16 +7,11 @@ import { NextResponse } from "next/server";
 //create product for login user
 export const POST = async (req) => {
   try {
-    //login check
-    const token = req.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please login first" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
-
-    const { userId } = await VerifyToken(token.value);
 
     await connectDB();
     const { name, desc, price, quantity, sold, shipping, image, category } =
@@ -49,9 +44,11 @@ export const GET = async (req) => {
   try {
     await connectDB();
     const products = await ProductModel.find({})
-      .populate("category")
       .populate("creater")
-      .limit(4);
+      .populate("category")
+      .limit(4)
+      .exec();
+
     if (!products) {
       return NextResponse.json(
         { error: "products not found" },

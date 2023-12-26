@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isLoggedIn } from "@/lib/config/db";
 import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
@@ -6,14 +6,14 @@ import { UserModel } from "@/lib/models/User";
 
 export const PUT = async (req) => {
   try {
-    //logged in check
-    const isLoggedIn = req.cookies.get("token") || "";
-    if (!isLoggedIn) {
-      return NextResponse.json(
-        { error: "Please login first" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
+
+    const token = req.cookies.get("token" || "");
+    const { userId } = await VerifyToken(token.value);
 
     const { password, cpassword } = await req.json();
     if (cpassword !== password) {
@@ -23,12 +23,6 @@ export const PUT = async (req) => {
         },
         { status: 401 }
       );
-    }
-
-    //token check
-    const { userId } = await VerifyToken(isLoggedIn.value);
-    if (!userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);

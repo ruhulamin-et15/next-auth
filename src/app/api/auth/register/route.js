@@ -1,15 +1,19 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isLoggedIn } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  //logged in checked
-  const isLoggedIn = req.cookies.get("token") || "";
-  if (isLoggedIn) {
-    return NextResponse.json(
-      { error: "You alrady logged in" },
-      { status: 401 }
-    );
+  //check allready login
+  const loggedInResponse = await isLoggedIn(req);
+  try {
+    if (!loggedInResponse) {
+      return NextResponse.json(
+        { error: "You alrady logged in" },
+        { status: 401 }
+      );
+    }
+  } catch (error) {
+    return loggedInResponse;
   }
 
   await connectDB();

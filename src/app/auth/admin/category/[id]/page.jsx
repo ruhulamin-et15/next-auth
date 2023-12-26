@@ -57,7 +57,7 @@ const SinglePage = ({ params }) => {
               </p>
             </div>
             <p className=" text-center bg-blue-400 p-2 rounded-md">
-              <Link href={`/auth/admin/category/update/${params.id}`}>
+              <Link href={`/auth/admin/category/update-category/${params.id}`}>
                 Update
               </Link>
             </p>

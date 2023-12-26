@@ -35,7 +35,9 @@ const UserProducts = ({ params }) => {
                 <Link
                   href={`/auth/products/${params.id}/get-product/${product._id}`}
                 >
-                  Edit
+                  <p className="bg-orange-500 rounded-lg text-center py-1 hover:bg-slate-600 hover:text-white">
+                    Edit
+                  </p>
                 </Link>
               </div>
             ))}

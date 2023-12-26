@@ -1,26 +1,18 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isLoggedIn } from "@/lib/config/db";
 import { UserModel } from "@/lib/models/User";
 import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
-//get profile info
-//this formula is perfect for get data
-export const GET = async (request) => {
+export const GET = async (req) => {
   try {
-    //login check by token
-    const token = request.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please login first" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
 
-    //verify token
+    const token = req.cookies.get("token") || "";
     const { userId } = await VerifyToken(token.value);
-    if (!userId) {
-      return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
-    }
 
     // user find by id from cookies id
     await connectDB();

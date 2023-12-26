@@ -1,6 +1,5 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isAdmin, isLoggedIn } from "@/lib/config/db";
 import { CategoryModel } from "@/lib/models/Category";
-import { VerifyToken } from "@/lib/service/Token.service";
 import { NextResponse } from "next/server";
 
 // get single category
@@ -31,22 +30,18 @@ export const GET = async (req) => {
 // delete category
 export const DELETE = async (req) => {
   try {
-    const token = (await req.cookies.get("token")) || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please Login First" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
 
-    const { admin } = await VerifyToken(token.value);
-
-    if (!admin) {
-      return NextResponse.json(
-        { errro: "Only admin delete category" },
-        { status: 401 }
-      );
+    //check admin
+    const adminResponse = await isAdmin(req);
+    if (adminResponse) {
+      return adminResponse;
     }
+
     await connectDB();
     const id = req.url.split("category/")[1];
     const deleteCategory = await CategoryModel.findByIdAndDelete(id);
@@ -72,21 +67,16 @@ export const DELETE = async (req) => {
 // update category
 export const PUT = async (req) => {
   try {
-    const token = req.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please Login First" },
-        { status: 401 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(req);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
 
-    const { admin } = await VerifyToken(token.value);
-
-    if (!admin) {
-      return NextResponse.json(
-        { errro: "Only admin update category" },
-        { status: 401 }
-      );
+    //check admin
+    const adminResponse = await isAdmin(req);
+    if (adminResponse) {
+      return adminResponse;
     }
 
     await connectDB();

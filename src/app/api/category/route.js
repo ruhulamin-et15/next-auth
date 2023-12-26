@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/config/db";
+import { connectDB, isAdmin, isLoggedIn } from "@/lib/config/db";
 import { CategoryModel } from "@/lib/models/Category";
 import { NextResponse } from "next/server";
 import { VerifyToken } from "@/lib/service/Token.service";
@@ -6,26 +6,20 @@ import { VerifyToken } from "@/lib/service/Token.service";
 //create category
 export const POST = async (request) => {
   try {
-    //login check
-    const token = request.cookies.get("token") || "";
-    if (!token) {
-      return NextResponse.json(
-        { error: "Please login first" },
-        { status: 404 }
-      );
+    //check login user
+    const loggedInResponse = await isLoggedIn(request);
+    if (loggedInResponse) {
+      return loggedInResponse;
     }
 
-    const { admin } = await VerifyToken(token.value);
-    const { userName } = await VerifyToken(token.value);
+    //check admin
+    const adminResponse = await isAdmin(request);
+    if (adminResponse) {
+      return adminResponse;
+    }
+
+    const token = request.cookies.get("token" || "");
     const { userId } = await VerifyToken(token.value);
-
-    //admin check
-    if (!admin) {
-      return NextResponse.json(
-        { error: "Only admin create category" },
-        { status: 401 }
-      );
-    }
 
     await connectDB();
     const { name } = await request.json();
