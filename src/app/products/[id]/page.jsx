@@ -1,9 +1,8 @@
 "use client";
-import Loading from "@/components/Loading";
-import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const SingleProductPage = ({ params }) => {
   const [product, setProduct] = useState(null);
@@ -18,9 +17,35 @@ const SingleProductPage = ({ params }) => {
     fetchData();
   }, []);
 
+  //add to cart functionality
+  const addToCart = () => {
+    const existingCartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const isProductInCart = existingCartItems.some(
+      (item) => item.id === product?.singleProduct._id
+    );
+
+    if (!isProductInCart) {
+      const newCartItem = {
+        id: product?.singleProduct._id,
+        name: product?.singleProduct.name,
+        price: product?.singleProduct.price,
+        quantity: 1,
+      };
+
+      const newCart = [...existingCartItems, newCartItem];
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      toast.success(`${product?.singleProduct.name} is added to cart!`);
+    } else {
+      toast.error(`${product?.singleProduct.name} is already in the cart!`);
+    }
+  };
+
   return (
     <>
-      <div className="lg:min-h-screen flex flex-col justify-center items-center px-4">
+      <div className="flex flex-col justify-center items-center px-4">
         <h2 className="py-4 text-center text-2xl font-semibold underline">
           Product Details
         </h2>
@@ -72,7 +97,7 @@ const SingleProductPage = ({ params }) => {
               <Link href="/">Buy Now</Link>
             </div>
             <div className="w-full bg-blue-400 rounded-md py-1 text-center">
-              <Link href="/">Add to Cart</Link>
+              <button onClick={addToCart}>Add to Cart</button>
             </div>
           </div>
         </div>

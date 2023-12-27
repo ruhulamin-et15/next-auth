@@ -29,7 +29,7 @@ const UpdateProfile = () => {
       });
       const data = await res.data;
       toast.success(data.msg);
-      router.push("/");
+      router.push("/auth/profile");
     } catch (error) {
       toast.error(error?.response?.data?.error);
     }
@@ -37,7 +37,7 @@ const UpdateProfile = () => {
 
   return (
     <>
-      <div className="lg:min-h-screen flex flex-col items-center lg:justify-center">
+      <div className="flex flex-col items-center lg:justify-center">
         <h2 className="py-4 text-center text-2xl font-semibold underline">
           Update Profile
         </h2>

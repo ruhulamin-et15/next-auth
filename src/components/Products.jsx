@@ -16,7 +16,10 @@ const GetProducts = () => {
       <div className="flex flex-col">
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-2">
           {products?.map((product) => (
-            <div className="bg-white  rounded-lg p-2 min-h-[60vh]">
+            <div
+              key={product._id}
+              className="bg-white  rounded-lg p-2 min-h-[60vh]"
+            >
               <div className="h-3/4">
                 <img className="w-full h-full rounded-md" src={"/watch.png"} />
               </div>
