@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const UpdateProductAdmin = ({ params }) => {
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState();
 
   //for mapping all data
@@ -21,6 +21,7 @@ const UpdateProductAdmin = ({ params }) => {
       const response = await axios.get(`/api/products/${params.id}`);
       const data = await response.data.singleProduct;
       setProduct(data);
+
       if (data) {
         setName(data.name || "");
         setDesc(data.desc || "");
@@ -28,6 +29,7 @@ const UpdateProductAdmin = ({ params }) => {
         setSold(data.sold || 0);
         setShipping(data.shipping || 0);
         setQuantity(data.quantity || "");
+        setCategory(data.category._id || "");
       }
     };
     fetchData();
@@ -39,7 +41,7 @@ const UpdateProductAdmin = ({ params }) => {
   const [sold, setSold] = useState("");
   const [shipping, setShipping] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState("");
 
   const router = useRouter();
 
@@ -165,7 +167,7 @@ const UpdateProductAdmin = ({ params }) => {
           </div>
           <button
             type="submit"
-            className="text-center text-white bg-green-500 rounded-lg px-4 py-2"
+            className="ms-4 mb-4 text-center text-white bg-green-500 rounded-lg px-4 py-2"
           >
             Update Product
           </button>

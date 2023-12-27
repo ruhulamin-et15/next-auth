@@ -17,11 +17,11 @@ export const POST = async (req) => {
     return loggedInResponse;
   }
 
-  //check banned user
-  const bannedUserResponse = await isBanned(req);
-  if (bannedUserResponse) {
-    return bannedUserResponse;
-  }
+  // //check banned user
+  // const bannedUserResponse = await isBanned(req);
+  // if (bannedUserResponse) {
+  //   return bannedUserResponse;
+  // }
 
   //this formula for POST use
   await connectDB();

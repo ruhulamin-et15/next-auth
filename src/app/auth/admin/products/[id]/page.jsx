@@ -66,23 +66,28 @@ const SingleProductPage = ({ params }) => {
                 {product?.singleProduct.sold}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.price}
+                {product?.singleProduct.price.toLocaleString("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                })}
               </p>
               <p className="text-xl mb-2 text-gray-600">
                 {product?.singleProduct.creater?.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                {product?.singleProduct.shipping}
+                {product?.singleProduct.shipping.toLocaleString("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                })}
               </p>
             </div>
-            <p className=" text-center bg-blue-400 p-2 rounded-md">
-              <Link href={`/auth/admin/products/update-product/${params.id}`}>
-                Update
-              </Link>
-            </p>
-            <p className=" text-center bg-red-400 p-2 rounded-md">
-              <button onClick={handleClick}>Delete</button>
-            </p>
+            <Link href={`/auth/admin/products/update-product/${params.id}`}>
+              <p className=" text-center bg-blue-400 p-2 rounded-md">Update</p>
+            </Link>
+
+            <button onClick={handleClick}>
+              <p className=" text-center bg-red-400 p-2 rounded-md">Delete</p>
+            </button>
           </div>
         </div>
         <p></p>

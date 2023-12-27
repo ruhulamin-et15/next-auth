@@ -4,10 +4,7 @@ import { NextResponse } from "next/server";
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URL);
     console.log("DB is connected");
   } catch (error) {
     mongoose.disconnect();
@@ -58,7 +55,7 @@ export const isAdmin = async (request) => {
   }
 };
 
-//admin check
+//banned check
 export const isBanned = async (request) => {
   try {
     const token = request.cookies.get("token") || "";

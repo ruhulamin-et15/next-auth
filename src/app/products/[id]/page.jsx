@@ -1,4 +1,6 @@
 "use client";
+import Loading from "@/components/Loading";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -45,19 +47,25 @@ const SingleProductPage = ({ params }) => {
                 {product?.singleProduct.category?.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.quantity}
+                {product?.singleProduct.quantity}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.sold}
+                {product?.singleProduct.sold}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                ${product?.singleProduct.price}
+                {product?.singleProduct.price.toLocaleString("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                })}
               </p>
               <p className="text-xl mb-2 text-gray-600">
                 {product?.singleProduct.creater?.name}
               </p>
               <p className="text-xl mb-2 text-gray-600">
-                {product?.singleProduct.shipping}
+                {product?.singleProduct.shipping.toLocaleString("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                })}
               </p>
             </div>
             <div className="w-full bg-blue-400 rounded-md py-1 text-center">

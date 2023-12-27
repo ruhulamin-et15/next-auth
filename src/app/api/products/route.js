@@ -13,6 +13,9 @@ export const POST = async (req) => {
       return loggedInResponse;
     }
 
+    const token = req.cookies.get("token" || "");
+    const { userId } = await VerifyToken(token.value);
+
     await connectDB();
     const { name, desc, price, quantity, sold, shipping, image, category } =
       await req.json();
